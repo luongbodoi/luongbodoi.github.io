@@ -1,6 +1,6 @@
 # *JSX*
 
-### 1. JSX là gì ?
+### 1. JSX là gì ??dsadasc
     - JSX  -> Javascript XML
     - Dùng để viết HTMl trong file Javascript
     - JSX cho phép chúng ta viết HTML trong React.
@@ -111,7 +111,7 @@
 ####    b. componentWillUpdate()
     - Phương thức này được gọi trước khi tiến hành re-render, bạn có thể thực hiện các hành động như update state, props,...trong phương thức này trước khi tiến hành re-render
 ####    c. ComponentDidUpdate()
-    - Phương thức này được gọi khi component đã re-render xong    
+    - Phương thức này được gọi khi component đã re-render xong   . 
   
 ##   4. unmouting
     -Đây là bước cuối cùng trong mỗi component, khi tất cả các tác vụ hoàn thành và bạn tiến hành unmount DOM. Quá trình này chỉ có duy nhất 1 phương thức đó là componentWillUnmount() :
@@ -124,9 +124,9 @@
     }
 
     -Vậy 1 React Functional Component là:
-        - một function Javascript / ES6 function
-        - phải trả về 1 React element
-        - nhận props làm tham số nếu cần
+        - một function Javascript / ES6 function.
+        - phải trả về 1 React element.
+        - nhận props làm tham số nếu cần.
 # *class component*
     - Chúng phức tạp hơn functional components ở chỗ nó còn có: phương thức khởi tạo, life-cycle, hàm render() và quản lý state (data).
     class Welcome extends React.Component {
@@ -138,5 +138,5 @@
     - Vì vậy, một React class component là:
       + là một class ES6, nó sẽ là một component khi nó "kế thừa" React component.
       + có thể nhận props (trong hàm khởi tạo) nếu cần.
-      + có thể maintain data của nó với state
-      + phải có 1 method render() trả về 1 React element (JSX), or null
+      + có thể maintain data của nó với state.
+      + phải có 1 method render() trả về 1 React element (JSX), or null.
