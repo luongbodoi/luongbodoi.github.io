@@ -1,6 +1,6 @@
 # *JSX*
 
-### 1. JSX là gì ??dsadasc
+### 1. JSX là gì ??
     - JSX  -> Javascript XML
     - Dùng để viết HTMl trong file Javascript
     - JSX cho phép chúng ta viết HTML trong React.
