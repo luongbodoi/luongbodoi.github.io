@@ -140,3 +140,101 @@
       + có thể nhận props (trong hàm khởi tạo) nếu cần.
       + có thể maintain data của nó với state.
       + phải có 1 method render() trả về 1 React element (JSX), or null.
+
+# *Hooks*
+
+    -Hook là một hàm đặc biệt cho phép bạn sử dụng các tính năng của React (mà không cần phải tạo class)
+
+## useState 
+    - Trong lần hiển thị ban đầu, trạng thái (State) được trả về giống với giá trị được truyền như đối số đầu tiên (InitialState).
+    - Hàm setState được sử dụng để cập nhật trạng thái. Nó chấp nhận một giá trị State mới và xếp hàng đợi một kết xuất lại của component.
+    - useState trả về một cặp giá trị dưới dạng mảng: state hiện tại và một hàm để update nó.
+    - seState() áp dụng replacing thay vì merging như bên class component.
+    - Initial state callback chỉ thực thi 1 lần đầu.
+  
+    - const [state, setState] = useState(initialCount);
+      - state: định nghĩa tên của state nó có thể là đơn giá trị hoặc object,.. (là   tham số của useState)
+      - setState: định nghĩa tên function dùng cho việc update state (là tham số của useState)
+      - initialStateValue: là giá trị ban đầu của state.
+
+    - EX: const [count, setCount] = useState(0); 
+    1. Đọc State
+    - Trong hàm (sử dụng với hooks), chúng ta dùng trực tiếp biến count:
+    - EX: <p> {count} lần</p>
+    2. Updating State   
+    - Trong hàm (sử dụng với hooks), chúng ta đã có biến setState
+    - setCount(count + 1)
+    3. Set state có thể dùng với callback
+    - Set state có thể dùng với callback
+        + Ex: 
+            setCount(count + 1)  
+            setCount(count + 1)  
+            setCount(count + 1) 
+        - > count = 2 
+    - Vì một vài lý do về batch update performance, state không được thay đổi ngay tức khắc sau khi hàm setState() được gọi. Vâng, điều đó có nghĩa là chúng ta không thể call setState() ở dòng đầu tiên và hi vọng nó thay đổi ở dòng tiếp theo.
+    - React sẽ gộp tất cả những hàm setState() sau đó gọi 1 lần duy nhất, để tránh việc render lại không cần thiết, làm tăng performance của app.
+    
+        => React sẽ gộp tất cả những hàm setState() sau đó gọi 1 lần duy nhất, để tránh việc render lại không cần thiết, làm tăng performance của app.
+
+    -Ngoài cách truyền vào 1 Object, chúng ta có thể truyền 1 function vào hàm setState(), function này nhận vào 2 tham số là prevState và prevProps tại thời điểm các thay đổi được cập nhật. Điều này đảm bảo rằng giá trị được update cuối cùng luôn dựa trên previous state.    
+    
+    - Ex:
+      - setCount(prevState => prevState + 1) 
+      - setCount(prevState => prevState + 1) 
+      - setCount(prevState => prevState + 1)
+      - > count = 4 
+
+## useEffect 
+    - Effect Hook cho phép thực hiện side effect bên trong các function component:
+    - "side effect": khi có tác động xảy ra khiến dữ liệu bị thay đổi
+    - Có 2 loại side effect phổ biến trong React component: loại không cần cleanup, và loại cần. Cùng phân biệt 2 loại này kỹ hơn.
+    - component cần thực hiện một việc gì đó sau khi render. React sẽ ghi nhớ hàm bạn truyền vào và sau đó gọi lại hàm này sau khi DOM đã update
+    - Đặt useEffect bên trong component cho phép chúng ta truy xuất đến state count (hoặc bất kỳ prop nào) bên trong effect
+    - useEffect chạy sau tất cả những lần render. Theo mặc định, nó chạy sau lần render đầu tiên và mỗi lần update.
+
+    - Sử dụng khi: 
+        +update DOM
+        +Call API
+        +Listen DOM events (scroll, resize)
+        +cleanup(remove listener)
+    - useEffect(callback, [deps])
+        callback: là bắt buộc
+        deps: không bắt buộc
+        -Có 3 trường hơp:
+        +TH1:useEffect(callback,)
+        +TH2:useEffect(callback,[])
+        +TH3:useEffect(callback, [deps])
+
+    - Đối với TH1 gọi callback mỗi khi component re-render và gọi callback sau khi component thêm element vào DOM
+    - Đối với TH2 chỉ gọi lại callback 1 lần sau khi component thêm element vào DOM
+    - Đối với TH3 callback sẽ được gọi lai mỗi khi deps thay đổi
+
+    1. Effect không cần Cleanup
+    - Đôi lúc, chúng ta muốn chạy một vài đoạn code sau khi React đã cập nhập DOM. Network request, tự ý thay đổi DOM, và logging là những ví dụ điển hình của effect không cần cleanup. Chúng ta gọi như vậy vì có thể chạy chúng và quên ngay lập tức
+    - Ex: 
+        import React, { useState, useEffect } from 'react';
+
+        function Example() {
+        const [count, setCount] = useState(0);
+
+        useEffect(() => {
+            document.title = `You clicked ${count} times`;
+        });
+
+         return (
+            <div>
+                <p>You clicked {count} times</p>
+                <button onClick={() => setCount(count + 1)}>
+                    Click me
+                </button>
+            </div>
+        );
+        } 
+
+    2. Effect cần Cleanup
+    - khi unmounted nó ra thì sự kiện vẫn sẽ được mount ở DOM và không thể sử dụng lại
+    gây ra hiện tượng rò rỉ bộ nhớ
+    - cách khắc phục
+      + dùng cleanup function
+      + dùng return 1 cái hàm remove trong useEffect (closure)
+      + trong hàm ý remove 
