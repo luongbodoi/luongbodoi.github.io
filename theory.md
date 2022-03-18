@@ -238,3 +238,62 @@
       + dùng cleanup function
       + dùng return 1 cái hàm remove trong useEffect (closure)
       + trong hàm ý remove 
+
+    - ex: 
+    useEffect(() => {
+	window.addEventListener('scroll', handleScroll)
+
+	// cleanup funtion
+	return () => {
+		window.removeEventListener('scroll', handleScroll)
+	    }
+    })
+
+## useLayoutEffect
+    - Có đặc điểm giống với useEffect khác nhau thứ tự thực hiện công việc
+    - Quy trình thực hiện 
+        + useEffect: 
+          B1. Cập nhật lại State
+          B2. Cập nhật lại Dom (mutated)
+          B3. Render lại UI
+          B4. Gọi cleanup nếu deps thay đổi
+          B5. Gọi useEffect callback
+        + useLayoutEffect:
+           B1. Cập nhật lại State
+           B2. Cập nhật lại Dom (mutated)
+           B3. Gọi cleanup nếu deps thay đổi (sync)
+           B4. Gọi useLayoutEffect callback (sync)
+           B5. Render lại UI 
+## useRef
+    - lưu các giá trị qua một tham chiếu bên ngoài function component
+    - useRef trả về một đối tượng ref có thể thay đổi nơi mà thuộc tính .current được khởi tạo và thêm vào giá trị của (initialValue) và giá trị này sẽ không thay đổi mỗi khi reset lại giao diện
+
+    -Ex: 
+    function TextInputWithFocusButton() {
+    const inputEl = useRef(null);
+     const onButtonClick = () => {
+    // `current` trỏ vào element text input đã được mount
+    inputEl.current.focus();
+    };
+    return (
+        <>
+            <input ref={inputEl} type="text" />
+            <button onClick={onButtonClick}>Đưa con trỏ vào ô input</button>
+        </>
+        );
+    }
+## React.memo
+    - React memo sinh ra với mục địch tránh việc rerender nhiều lần ảnh hưởng đến performance
+
+    -Ex : 
+    const MyComponent = React.memo(function MyComponent(props) {
+        /* only rerenders if props change */
+    });
+    - Cách hoạt động :
+    -có memo nó sẽ check prop chuyền vào có thay đổi không nếu thay đổi chúng sẽ rerender còn không thay đổi sẽ không cần làm gì, tương đối giống với việc sự dụng shouldComponentUpdate trong class component hay PureComponent
+    
+## useMemo
+
+## useCallback
+## useContext
+## useImperativeHandle
