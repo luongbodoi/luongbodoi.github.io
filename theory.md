@@ -285,8 +285,8 @@ gây ra hiện tượng rò rỉ bộ nhớ
 ## useRef
 - lưu các giá trị qua một tham chiếu bên ngoài function component
 - useRef trả về một đối tượng ref có thể thay đổi nơi mà thuộc tính .current được khởi tạo và thêm vào giá trị của (initialValue) và giá trị này sẽ không thay đổi mỗi khi reset lại giao diện
-    ```javascript
     -Ex: 
+    ```javascript
     function TextInputWithFocusButton() {
     const inputEl = useRef(null);
      const onButtonClick = () => {
@@ -300,26 +300,43 @@ gây ra hiện tượng rò rỉ bộ nhớ
         </>
         );
     }
-```
-
-## useMemo 
-- Bản chất useMemo là caching lại giá trị return của function, mỗi lần component rerender nó sẽ kiểm tra giá trị tham số truyền vào function nếu giá trị đó không thay đổi, thì return value đã caching trong memory. Ngược lại nếu giá trị tham số truyền vào thay đổi, nó sẽ thực hiện tính toán lại vào trả về value, sao đó caching lại value cho những lần rerender tiếp theo.
-- Nguyên lý hoạt động của deps giống với useEffect useCallback
-    + nếu deps là mảng rỗng thì chạy 1 lần
-    + nếu giá trị trong deps thay đổi thì mới chạy lại callback nếu không thay đổi thì trả về giá trị trước đó
 
 ## React.memo
 
 - React memo sinh ra với mục địch tránh việc rerender nhiều lần ảnh hưởng đến performance
+- Cách hoạt động :
+- có memo nó sẽ check prop chuyền vào có thay đổi không nếu thay đổi chúng sẽ rerender còn không thay đổi sẽ không cần làm gì, tương đối giống với việc sự dụng shouldComponentUpdate trong class component hay PureComponent
 ```javascript
 - Ex : 
     const MyComponent = React.memo(function MyComponent(props) {
         /* only rerenders if props change */
     });
-
-- Cách hoạt động :
-- có memo nó sẽ check prop chuyền vào có thay đổi không nếu thay đổi chúng sẽ rerender còn không thay đổi sẽ không cần làm gì, tương đối giống với việc sự dụng shouldComponentUpdate trong class component hay PureComponent
 ```    
 
 ## useImperativeHandle
+
 ## useCallback
+
+
+## useMemo
+- Bản chất useMemo là caching lại giá trị return của function, mỗi lần component rerender nó sẽ kiểm tra giá trị tham số truyền vào function nếu giá trị đó không thay đổi, thì return value đã caching trong memory. Ngược lại nếu giá trị tham số truyền vào thay đổi, nó sẽ thực hiện tính toán lại vào trả về value, sao đó caching lại value cho những lần rerender tiếp theo.
+- Nguyên lý hoạt động của deps giống với useEffect useCallback
+  + nếu deps là mảng rỗng thì chạy 1 lần
+  + nếu giá trị trong deps thay đổi thì mới chạy lại callback nếu không thay đổi thì trả về giá trị trước đó
+```javascript
+funcion CaculateTotal () {
+    ...
+    const total = useMemo( () => {
+        const result = products.reduce((result, prod) => {
+            return result + prod.price
+        })
+
+        return result
+    }, [products])
+
+    ...
+    return (
+        ...
+    )
+}
+```
