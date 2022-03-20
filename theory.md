@@ -313,11 +313,18 @@ gây ra hiện tượng rò rỉ bộ nhớ
     });
 ```    
 
-## useImperativeHandle
-
 ## useCallback
-
-
+- cách hoạt động gần giống useEffect
+- truyền prop là một function thì phải sử dụng useCallback 
+hết để tránh re-render không cần thiết
+- nếu không sử dụng reactmemo cho thằng component con thì k
+phải sử dụng useCallback
+```javascript
+const plusFive = useCallback(() => {
+  console.log("I was called!");
+  return num + 5;
+}, [num]);
+```
 ## useMemo
 - Bản chất useMemo là caching lại giá trị return của function, mỗi lần component rerender nó sẽ kiểm tra giá trị tham số truyền vào function nếu giá trị đó không thay đổi, thì return value đã caching trong memory. Ngược lại nếu giá trị tham số truyền vào thay đổi, nó sẽ thực hiện tính toán lại vào trả về value, sao đó caching lại value cho những lần rerender tiếp theo.
 - Nguyên lý hoạt động của deps giống với useEffect useCallback
