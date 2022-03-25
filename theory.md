@@ -347,3 +347,29 @@ funcion CaculateTotal () {
     )
 }
 ```
+
+## Synchronous (Đồng bộ) and Asynchronous (Không đồng bộ)
+
+- Hiểu đơn giản thì đồng bộ có nghĩa là thực hiện các công việc một cách tuần tự, công việc này xong thì mới được thực hiện các công việc khác.
+- Ví dụ có 2 công việc A và B thì khi có nghĩa là A thực hiện xong trước rồi mới tới lượt B. Như vậy tổng thời gian hoàn thành sẽ như bên dưới.
+<img src="https://images.viblo.asia/full/a4c460bb-d717-48b2-8d2b-2265beab6dff.png" alt="Getting started" />
+- Điều này nó sẽ ảnh hưởng đến hiệu suất của người dùng. Giả sử một request gửi lên server yêu cầu server thực hiện chức năng như import file hoặc đọc ghi file thì lúc này server sẽ mất nhiều thời gian để xử lý những việc này. Điều đó cũng đồng nghĩa với việc trong lúc server thực hiện chức năng đó thì sẽ không thể thực hiện thêm một hành động nào khác. Chưa kể trong lúc server đang thực hiện những hiện việc đó thì lại có thể có nhiều request được gởi đến trong khi server chưa thực hiện xong, điều này có thể gây crash server.
+
+### 1. Javascript và cơ chế bất đồng bộ
+- Đối với javascript thì nó là ngôn ngữ là ngôn ngữ Single threed
+- nó chỉ có 1 thredd duy nhất, nên các bạn không thể sử dụng multi thread như những ngôn ngữ khác mà phải sử dụng cơ chế xử lý bất đồng bộ
+<img src="https://images.viblo.asia/full/827717a9-487a-45c1-8665-6888fe258f2f.png" />
+- Với cách xử lý bất đồng bộ, khi A bắt đầu thực hiện, chương trình tiếp tục thực hiện B mà không đợi A kết thúc. Việc mà bạn cần làm ở đây là cung cấp một phương thức để chương trình thực hiện khi A hoặc B kết thúc.
+- Cơ chế giúp bạn thực hiện việc này trong JavaScript có thể là sử dụng Callback, Promise hoặc Async/await.
+
+### 2. Async/await
+- Promise đã giải quyết khá tốt những vấn đề của callback. Tuy nhiên, dùng promise đôi khi ta vẫn thấy hơi khó chịu vì phải truyền callback vào hàm then và catch. Code cũng sẽ hơi dư thừa và khó debug, vì toàn bộ các hàm then chỉ được tính là 1 câu lệnh nên không debug riêng từng dòng được. Và khi ES7 ra đời, có một tính năng đó là async/await đã gải quyết được vấn đề này
+- Để sử dụng hàm async, ta cần khai báo từ khóa async ngay trước từ khóa định nghĩa hàm. Tức là, với hàm định nghĩa với từ khóa function ta phải khai báo ngay trước function, với hàm mũi tên (arrow function) ta phải khai báo trước tập tham số đầu vào
+<img src="https://images.viblo.asia/7db7f923-6c70-4b0b-a9c3-1180bdcee5ac.png">
+- Kết quả trả ra của hàm async luôn là một Promise dù bạn có gọi await - có xử lý bất đồng bộ hay không. Promise này sẽ ở trạng thái thành công với kết quả được trả ra với từ khóa return của hàm async, hoặc trạng thái thất bại với kết quả được đẩy qua từ khóa throw trong hàm async. Như vậy,chúng ta có thể thấy bản chất của hàm async chính là Promise.
+- Với Promise, ta có thể xử lý ngoại lệ với catch khá đơn giản. Tuy nhiên cũng không dễ dàng theo dõi và dễ đọc. Nhưng với hàm async, việc này cực kì đơn giản bằng từ khóa try catch hệt như các thao tác đồng bộ.
+- <img src= "https://images.viblo.asia/44e02f04-5886-437e-b346-3701393f0b97.png">
+- Tóm tắt:
+  - Khi gặp await, nó sẽ convert hàm đó thành promise với callback là tất cả những phần code phía sau await đó. Bản chất await là một promise, phần code nằm sau await thực chất là code nằm trong callback của hàm await đó.
+  - await luôn luôn nằm trong hàm async như ví dụ trên ( await không thể nằm trong hàm không được khai báo từ khóa async phía trước)
+  - Thứ tự thực hiện các câu lệnh trong js nói chung hay nodejs nói riêng đều là chạy từ trên xuống dưới (nghĩa là chạy sync chứ không phải async), trừ những hàm liên quan tới I/O thì mới được chạy async (Tham khảo thêm ở bài viết event loop trong js )
